@@ -36,7 +36,7 @@ const LogoForm: React.FC<LogoFormProps> = ({ formData, setFormData, onSubmit, is
   };
 
   return (
-    <div className="bg-white shadow-2xl shadow-stone-400/20 overflow-hidden min-h-[800px] flex flex-col md:flex-row animate-fade-in">
+    <div className="bg-white shadow-2xl shadow-stone-400/20 overflow-hidden min-h-[800px] flex flex-col md:flex-row animate-fade-in relative">
       
       {/* Left Column: Context & Progress (Sticky on Desktop) */}
       <div className="md:w-1/3 bg-spa-900 text-white p-10 md:p-14 flex flex-col justify-between relative overflow-hidden">
@@ -50,7 +50,7 @@ const LogoForm: React.FC<LogoFormProps> = ({ formData, setFormData, onSubmit, is
             构建您的<br/>
             <span className="italic text-gold-200">品牌美学</span>
           </h1>
-          <p className="text-spa-200 font-light leading-relaxed max-w-xs">
+          <p className="text-spa-200 font-light leading-relaxed max-w-xs text-sm">
             请输入您的品牌信息，Gemini AI 将为您提炼行业特征，定制高端视觉符号。
           </p>
         </div>
@@ -81,165 +81,182 @@ const LogoForm: React.FC<LogoFormProps> = ({ formData, setFormData, onSubmit, is
       </div>
 
       {/* Right Column: Interactive Form */}
-      <div className="md:w-2/3 p-8 md:p-14 overflow-y-auto bg-white">
-        <form className="space-y-12 max-w-2xl mx-auto">
-          
-          {/* Section 1 */}
-          <section>
-            <h3 className="text-2xl font-serif text-spa-900 mb-6 flex items-center gap-3">
-              <span className="w-8 h-[1px] bg-gold-400"></span> 品牌基础
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="group">
-                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">店铺名称</label>
-                <div className="relative">
+      <div className="md:w-2/3 bg-white flex flex-col h-full">
+        <div className="flex-1 overflow-y-auto p-8 md:p-14">
+          <form className="space-y-16 max-w-2xl mx-auto">
+            
+            {/* Section 1: Brand Identity */}
+            <section>
+              <h3 className="text-3xl font-serif text-spa-900 mb-8">品牌基础信息</h3>
+              <div className="space-y-10">
+                <div className="group relative">
                   <input
                     type="text"
                     name="storeName"
+                    id="storeName"
                     value={formData.storeName}
                     onChange={handleInputChange}
+                    className="peer w-full bg-transparent border-b border-stone-300 py-3 text-2xl font-serif text-spa-900 placeholder-transparent focus:outline-none focus:border-spa-800 transition-colors"
                     placeholder="例如：云隐足道"
-                    className="w-full bg-stone-50 border-l-4 border-transparent focus:border-gold-400 px-5 py-4 text-lg font-serif placeholder-stone-300 focus:bg-white focus:shadow-lg focus:outline-none transition-all duration-300"
                   />
+                  <label 
+                    htmlFor="storeName"
+                    className="absolute left-0 -top-3.5 text-xs font-bold text-stone-400 uppercase tracking-widest transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-stone-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-gold-600 peer-focus:text-xs"
+                  >
+                    店铺名称
+                  </label>
                 </div>
-              </div>
-              <div className="group">
-                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Slogan / 副标题</label>
-                <div className="relative">
+
+                <div className="group relative">
                   <input
                     type="text"
                     name="subText"
+                    id="subText"
                     value={formData.subText}
                     onChange={handleInputChange}
+                    className="peer w-full bg-transparent border-b border-stone-300 py-3 text-xl font-serif text-spa-900 placeholder-transparent focus:outline-none focus:border-spa-800 transition-colors"
                     placeholder="例如：养生 · SPA"
-                    className="w-full bg-stone-50 border-l-4 border-transparent focus:border-gold-400 px-5 py-4 text-lg font-serif placeholder-stone-300 focus:bg-white focus:shadow-lg focus:outline-none transition-all duration-300"
                   />
+                  <label 
+                    htmlFor="subText"
+                    className="absolute left-0 -top-3.5 text-xs font-bold text-stone-400 uppercase tracking-widest transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-stone-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-gold-600 peer-focus:text-xs"
+                  >
+                    Slogan / 副标题
+                  </label>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          {/* Section 2 */}
-          <section>
-            <h3 className="text-2xl font-serif text-spa-900 mb-6 flex items-center gap-3">
-              <span className="w-8 h-[1px] bg-gold-400"></span> 核心服务
-            </h3>
-            <p className="text-stone-500 text-sm mb-4">请选择主要经营项目，AI 将提取相关视觉元素。</p>
-            <div className="flex flex-wrap gap-3">
-              {COMMON_SERVICES.map((service) => {
-                const isSelected = formData.services.includes(service.label);
-                return (
-                  <button
-                    key={service.id}
-                    type="button"
-                    onClick={() => toggleService(service.label)}
-                    className={`
-                      px-6 py-3 rounded-sm text-sm font-medium transition-all duration-300 border
-                      ${isSelected 
-                        ? 'bg-spa-800 text-white border-spa-800 shadow-lg scale-105 z-10' 
-                        : 'bg-stone-50 text-stone-600 border-stone-100 hover:border-stone-300 hover:bg-white'
-                      }
-                    `}
-                  >
-                    {service.label}
-                  </button>
-                );
-              })}
-            </div>
-          </section>
+            {/* Section 2: Services */}
+            <section>
+              <div className="flex justify-between items-end mb-6">
+                <h3 className="text-2xl font-serif text-spa-900">核心服务</h3>
+                <span className="text-xs font-medium text-gold-600 bg-gold-50 px-2 py-1 rounded-md">
+                  已选 {formData.services.length}/3
+                </span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                {COMMON_SERVICES.map((service) => {
+                  const isSelected = formData.services.includes(service.label);
+                  return (
+                    <button
+                      key={service.id}
+                      type="button"
+                      onClick={() => toggleService(service.label)}
+                      className={`
+                        py-3 px-2 text-sm transition-all duration-200 border
+                        ${isSelected 
+                          ? 'bg-spa-900 border-spa-900 text-white shadow-md' 
+                          : 'bg-white border-stone-200 text-stone-600 hover:border-spa-400 hover:text-spa-800'
+                        }
+                      `}
+                    >
+                      {service.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
 
-          {/* Section 3 */}
-          <section>
-            <h3 className="text-2xl font-serif text-spa-900 mb-6 flex items-center gap-3">
-              <span className="w-8 h-[1px] bg-gold-400"></span> 视觉定调
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {STYLE_OPTIONS.map((option) => {
-                const isSelected = formData.style === option.id;
-                return (
-                  <div
-                    key={option.id}
-                    onClick={() => setFormData(prev => ({ ...prev, style: option.id }))}
-                    className={`
-                      cursor-pointer group relative p-5 border transition-all duration-300
-                      ${isSelected 
-                        ? 'border-gold-400 bg-spa-50' 
-                        : 'border-stone-200 hover:border-spa-300'
-                      }
-                    `}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                       <span className={`font-serif font-bold text-lg ${isSelected ? 'text-spa-900' : 'text-stone-700'}`}>{option.label}</span>
-                       <div className={`w-3 h-3 rounded-full ${option.previewColor}`}></div>
+            {/* Section 3: Style */}
+            <section>
+              <h3 className="text-2xl font-serif text-spa-900 mb-6">视觉定调</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {STYLE_OPTIONS.map((option) => {
+                  const isSelected = formData.style === option.id;
+                  return (
+                    <div
+                      key={option.id}
+                      onClick={() => setFormData(prev => ({ ...prev, style: option.id }))}
+                      className={`
+                        cursor-pointer relative p-6 border transition-all duration-300 flex items-start gap-4
+                        ${isSelected 
+                          ? 'border-gold-500 bg-white shadow-[0_4px_20px_-5px_rgba(197,160,40,0.3)]' 
+                          : 'border-stone-200 bg-white hover:border-spa-300'
+                        }
+                      `}
+                    >
+                      <div className={`w-10 h-10 rounded-full flex-shrink-0 mt-1 ${option.previewColor}`}></div>
+                      <div>
+                        <h4 className={`font-serif font-bold text-lg mb-1 ${isSelected ? 'text-spa-900' : 'text-stone-700'}`}>
+                          {option.label}
+                        </h4>
+                        <p className="text-xs text-stone-500 leading-relaxed font-light">
+                          {option.description}
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-xs text-stone-500 leading-relaxed">{option.description}</p>
-                    {isSelected && <div className="absolute top-0 left-0 w-1 h-full bg-gold-400"></div>}
-                  </div>
-                );
-              })}
-            </div>
-          </section>
+                  );
+                })}
+              </div>
+            </section>
 
-          {/* Section 4 */}
-          <section>
-            <h3 className="text-2xl font-serif text-spa-900 mb-6 flex items-center gap-3">
-              <span className="w-8 h-[1px] bg-gold-400"></span> 定制细节
-            </h3>
-            <div className="space-y-6">
+            {/* Section 4: Details */}
+            <section className="space-y-8">
               <div>
-                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">其他要求</label>
+                <label className="block text-xs font-bold text-stone-400 uppercase tracking-widest mb-3">其他定制要求</label>
                 <textarea
                   name="additionalRequirements"
                   value={formData.additionalRequirements}
                   onChange={handleInputChange}
                   rows={2}
-                  placeholder="补充描述，例如：希望能体现“禅意”，避免使用过于鲜艳的红色..."
-                  className="w-full bg-stone-50 border border-stone-200 px-5 py-4 text-stone-700 focus:bg-white focus:border-gold-400 focus:ring-0 transition-colors resize-none"
+                  placeholder="请输入任何特殊要求..."
+                  className="w-full bg-stone-50 border border-stone-200 px-4 py-3 text-stone-700 text-sm focus:bg-white focus:border-gold-500 focus:outline-none focus:ring-1 focus:ring-gold-500 transition-all resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">参考图片</label>
+                <label className="block text-xs font-bold text-stone-400 uppercase tracking-widest mb-3">参考图片 (可选)</label>
                 <div 
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-stone-200 hover:border-gold-400 hover:bg-gold-50/10 rounded-sm p-6 text-center cursor-pointer transition-colors"
+                  className={`
+                    group border border-dashed rounded-sm p-8 text-center cursor-pointer transition-all
+                    ${formData.referenceImage ? 'border-gold-500 bg-gold-50/20' : 'border-stone-300 hover:border-spa-400 hover:bg-stone-50'}
+                  `}
                 >
                   <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" className="hidden" />
                   
                   {formData.referenceImage ? (
-                    <div className="flex items-center justify-center gap-2 text-spa-700">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                      <span className="font-medium">{formData.referenceImage.name}</span>
+                    <div className="flex flex-col items-center gap-2">
+                       <span className="text-gold-700 font-serif italic text-lg">{formData.referenceImage.name}</span>
+                       <span className="text-xs text-gold-500 uppercase tracking-wider">点击更换</span>
                     </div>
                   ) : (
-                    <div className="text-stone-400 flex flex-col items-center">
-                      <svg className="w-8 h-8 mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                      <span className="text-sm">点击上传参考图片 (可选)</span>
+                    <div className="flex flex-col items-center">
+                      <span className="text-spa-800 font-serif text-lg mb-1 group-hover:text-gold-600 transition-colors">Click to Upload Image</span>
+                      <span className="text-stone-400 text-xs">支持 JPG, PNG 格式</span>
                     </div>
                   )}
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          {/* Action */}
-          <div className="pt-8 border-t border-stone-100">
-            <button
+            {/* Bottom Spacer */}
+            <div className="h-20"></div>
+          </form>
+        </div>
+
+        {/* Sticky Action Footer */}
+        <div className="sticky bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-stone-100 p-6 md:px-14 flex items-center justify-between z-20">
+             <div className="hidden md:block">
+                <p className="text-xs text-stone-400 uppercase tracking-widest">
+                   Est. Time: ~15 Seconds
+                </p>
+             </div>
+             <button
               onClick={onSubmit}
               disabled={isSubmitting || !formData.storeName || formData.services.length === 0}
               className={`
-                w-full py-5 text-lg font-serif font-bold tracking-widest uppercase transition-all duration-300
+                flex-1 md:flex-none md:w-64 py-4 text-sm font-bold tracking-[0.2em] uppercase transition-all duration-300
                 ${isSubmitting || !formData.storeName || formData.services.length === 0
                   ? 'bg-stone-200 text-stone-400 cursor-not-allowed'
-                  : 'bg-spa-900 text-white hover:bg-gold-600 shadow-xl'
+                  : 'bg-spa-900 text-white hover:bg-gold-600 shadow-xl hover:shadow-2xl hover:-translate-y-1'
                 }
               `}
             >
-              {isSubmitting ? 'Generating...' : 'Start Design Process'}
+              {isSubmitting ? '正在生成...' : '开始生成设计'}
             </button>
-          </div>
-
-        </form>
+        </div>
       </div>
     </div>
   );
