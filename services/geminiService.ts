@@ -79,9 +79,16 @@ export const analyzeBrandIdentity = async (formData: SpaFormData): Promise<Analy
   let text = response.text;
   if (!text) throw new Error("Failed to analyze brand identity.");
   
-  // Clean markdown code blocks if present (fixes potential 500 JSON parse errors)
-  text = text.replace(/^```json\s*/, '').replace(/^```\s*/, '').replace(/\s*```$/, '');
+  // Robust JSON cleaning
+  // 1. Remove markdown code blocks
+  text = text.replace(/```json/g, '').replace(/```/g, '');
   
+  // 2. Extract JSON object if there is extra text
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    text = jsonMatch[0];
+  }
+
   try {
     return JSON.parse(text) as AnalysisResult;
   } catch (e) {
