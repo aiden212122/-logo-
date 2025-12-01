@@ -52,4 +52,13 @@ declare global {
   interface Window {
     aistudio?: AIStudio;
   }
+
+  // Augment NodeJS namespace instead of redeclaring process variable
+  // This ensures API_KEY is available on process.env if @types/node is present
+  namespace NodeJS {
+    interface ProcessEnv {
+      API_KEY?: string;
+      [key: string]: any;
+    }
+  }
 }

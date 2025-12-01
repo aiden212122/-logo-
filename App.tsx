@@ -23,10 +23,13 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const checkKey = async () => {
+      // 1. Check for AI Studio (Development Env)
       if (window.aistudio) {
         const hasKey = await window.aistudio.hasSelectedApiKey();
         setHasApiKey(hasKey);
-      } else if (process.env.API_KEY) {
+      } 
+      // 2. Check for Process Env (Vercel / Production Env)
+      else if (process.env.API_KEY) {
         setHasApiKey(true);
       }
     };
@@ -66,8 +69,12 @@ const App: React.FC = () => {
       setLoadingStage('idle');
 
       if (errorMessage.includes("Requested entity was not found") || errorMessage.includes("403")) {
-        setHasApiKey(false);
-        setError("API Key 验证失败或权限不足。请重新连接您的 Google Cloud 项目。");
+        // If it's a permission error, keep hasApiKey true on Vercel (user needs to fix Env Var),
+        // but set it false on AI Studio so they can reconnect.
+        if (window.aistudio) {
+          setHasApiKey(false);
+        }
+        setError("API Key 验证失败或权限不足。请检查您的配置。");
       }
     }
   };
@@ -85,12 +92,25 @@ const App: React.FC = () => {
           <div className="w-16 h-16 bg-spa-800 text-white mx-auto flex items-center justify-center text-2xl font-serif font-bold mb-6">Z</div>
           <h1 className="text-3xl font-serif text-stone-900 mb-2">{APP_NAME}</h1>
           <p className="text-stone-500 mb-8">{APP_TAGLINE}</p>
-          <button
-            onClick={handleConnect}
-            className="w-full py-4 px-6 bg-spa-800 text-white font-medium hover:bg-spa-900 transition-colors shadow-lg"
-          >
-            连接 Google Cloud
-          </button>
+          
+          {window.aistudio ? (
+            <button
+              onClick={handleConnect}
+              className="w-full py-4 px-6 bg-spa-800 text-white font-medium hover:bg-spa-900 transition-colors shadow-lg"
+            >
+              连接 Google Cloud
+            </button>
+          ) : (
+            <div className="text-left bg-stone-50 p-4 rounded border border-stone-200 text-sm text-stone-600">
+              <p className="font-bold mb-2 text-spa-800">未检测到 API Key</p>
+              <p className="mb-2">如果您已部署到 Vercel，请前往后台设置：</p>
+              <ul className="list-disc pl-4 space-y-1">
+                <li>进入 <strong>Settings</strong> &gt; <strong>Environment Variables</strong></li>
+                <li>Key: <code>VITE_API_KEY</code></li>
+                <li>Value: <code>您的 Gemini API Key</code></li>
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     );

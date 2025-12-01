@@ -76,7 +76,7 @@ export const analyzeBrandIdentity = async (formData: SpaFormData): Promise<Analy
     }
   });
 
-  let text = response.text;
+  let text = response?.text; // Optional chaining
   if (!text) throw new Error("Failed to analyze brand identity.");
   
   // Robust JSON cleaning
@@ -174,7 +174,7 @@ export const generateLogoImage = async (
 
   // Extract image from response
   // Using optional chaining to prevent TypeScript errors about undefined values
-  const candidates = response.candidates;
+  const candidates = response?.candidates;
   if (!candidates || candidates.length === 0) {
     throw new Error("No image generated.");
   }
