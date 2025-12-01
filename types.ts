@@ -42,7 +42,7 @@ export interface StyleDefinition {
   previewColor: string;
 }
 
-// Global type augmentations to fix TS2339 and TS2580 errors
+// Global type augmentations
 declare global {
   interface AIStudio {
     hasSelectedApiKey: () => Promise<boolean>;
@@ -51,14 +51,5 @@ declare global {
   
   interface Window {
     aistudio?: AIStudio;
-  }
-
-  // Augment NodeJS namespace instead of redeclaring process variable
-  // This ensures API_KEY is available on process.env if @types/node is present
-  namespace NodeJS {
-    interface ProcessEnv {
-      API_KEY?: string;
-      [key: string]: any;
-    }
   }
 }
