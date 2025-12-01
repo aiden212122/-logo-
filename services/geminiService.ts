@@ -168,7 +168,9 @@ export const generateLogoImage = async (
     },
     // Adding optional generation config to ensure best quality
     config: {
-       // We rely on the prompt for aspect ratio, but ensuring no unexpected filters
+       imageConfig: {
+         imageSize: '2K'
+       }
     }
   });
 
