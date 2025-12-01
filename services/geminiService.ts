@@ -173,13 +173,17 @@ export const generateLogoImage = async (
   });
 
   // Extract image from response
-  // The structure for image generation responses often puts the image in candidates[0].content.parts
+  // Using optional chaining to prevent TypeScript errors about undefined values
   const candidates = response.candidates;
   if (!candidates || candidates.length === 0) {
     throw new Error("No image generated.");
   }
 
-  const generatedParts = candidates[0].content.parts;
+  const generatedParts = candidates[0].content?.parts;
+  if (!generatedParts) {
+    throw new Error("No content parts found in response.");
+  }
+
   let base64Image = '';
 
   for (const part of generatedParts) {

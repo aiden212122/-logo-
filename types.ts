@@ -42,9 +42,14 @@ export interface StyleDefinition {
   previewColor: string;
 }
 
+// Global type augmentations to fix TS2339 and TS2580 errors
 declare global {
   interface AIStudio {
     hasSelectedApiKey: () => Promise<boolean>;
     openSelectKey: () => Promise<void>;
+  }
+  
+  interface Window {
+    aistudio?: AIStudio;
   }
 }
